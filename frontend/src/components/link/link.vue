@@ -74,7 +74,7 @@ export default {
         }
       )
     },
-    deleteLink(id){
+    deleteLink(id) {
 
     }
   },
