@@ -5,6 +5,7 @@ import LinkCollection from '@/components/LinkCollection'
 
 import sales from '../components/sales/sales.vue';
 import linkiee from '../components/linkiee/linkiee.vue';
+import link from '../components/link/link.vue';
 
 Vue.use(Router)
 
@@ -29,6 +30,11 @@ export default new Router({
       path: '/linkiee',
       name: 'linkiee',
       component: linkiee
+    },
+    {
+      path: '/link',
+      name: 'link',
+      component: link
     }
   ]
 })

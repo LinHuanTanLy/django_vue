@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-      <el-menu :default-openeds="['1', '1']">
+      <el-menu>
         <el-submenu index="1">
           <template slot="title"><i class="el-icon-message"></i>营销</template>
           <el-menu-item-group>
@@ -36,7 +36,7 @@
           <template slot="title"><i class="el-icon-setting"></i>links</template>
           <el-menu-item-group>
             <template slot="title">分组一</template>
-            <el-menu-item index="3-1">选项1</el-menu-item>
+            <el-menu-item index="3-1" @click="goto('/link')">我的收藏夹</el-menu-item>
             <el-menu-item index="3-2">选项2</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group title="分组2">
@@ -91,7 +91,6 @@
 <script>
 import nikiLogo from '../src/assets/niki_logo.png'
 
-
 export default {
   data() {
     return {
@@ -99,9 +98,9 @@ export default {
     }
   },
 
-  methods:{
-    goto(path){
-     this.$router.replace(path)
+  methods: {
+    goto(path) {
+      this.$router.replace(path)
     }
   }
 };
