@@ -6,6 +6,7 @@
       :header-cell-style="{
     'background-color': '#E5EEFF'
     }"
+      chan
       border
       style="width: 100%">
       <el-table-column
@@ -40,9 +41,11 @@
       </el-table-column>
       <el-table-column align="center"
                        width="180">
+        <template slot-scope="scope">
+          <el-button @click="open(scope.row.fields)">编辑</el-button>
+          <el-button @click="deleteLink">删除</el-button>
+        </template>
 
-        <el-button>编辑</el-button>
-        <el-button>删除</el-button>
       </el-table-column>
     </el-table>
 
@@ -64,6 +67,24 @@ export default {
     }
   },
   methods: {
+    open(id) {
+      console.log(id)
+      this.$confirm('此操作将永久删除该文件, 是否继续?' + id, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
     getAllLinks() {
       this.$http.get('http://localhost:8000/api/queryAllLinks').then(
         value => {
@@ -75,7 +96,21 @@ export default {
       )
     },
     deleteLink(id) {
-
+      this.$confirm('此操作将永久删除该链接, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     }
   },
 }

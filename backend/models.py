@@ -1,8 +1,11 @@
+import uuid
+
 from django.db import models
 
 
 # Create your models here.
 class Link(models.Model):
+    linkId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     linkDescription = models.CharField(max_length=200, verbose_name="链接描述")
     linkUrl = models.CharField(max_length=200, verbose_name="链接地址")
     linkRemark = models.CharField(max_length=200, verbose_name='链接备注')
