@@ -16,7 +16,7 @@
         label="链接描述">
       </el-table-column>
       <el-table-column
-        prop="fields.linkUrl"
+        prop="linkUrl"
         align="center"
         label="网页地址"
         class="normal-table-column">
