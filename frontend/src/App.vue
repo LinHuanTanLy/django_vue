@@ -6,7 +6,9 @@
           <template slot="title"><i class="el-icon-message"></i>营销</template>
           <el-menu-item-group>
             <template slot="title">商品模块</template>
-            <el-menu-item index="1-1" @click="goto('/sales')">商品模块</el-menu-item>
+            <el-menu-item index="1-1" @click="goto('/sales')"
+              >商品模块</el-menu-item
+            >
             <el-menu-item index="1-2">选项2</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group title="分组2">
@@ -36,7 +38,9 @@
           <template slot="title"><i class="el-icon-setting"></i>links</template>
           <el-menu-item-group>
             <template slot="title">分组一</template>
-            <el-menu-item index="3-1" @click="goto('/link')">我的收藏夹</el-menu-item>
+            <el-menu-item index="3-1" @click="goto('/link')"
+              >我的收藏夹</el-menu-item
+            >
             <el-menu-item index="3-2">选项2</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group title="分组2">
@@ -51,8 +55,10 @@
     </el-aside>
 
     <el-container>
-      <el-header style="text-align: right; font-size: 12px;">
-        <el-avatar class="title_avatar" :src="nikiLogo" size="small">汤圆</el-avatar>
+      <el-header style="text-align: right; font-size: 12px">
+        <el-avatar class="title_avatar" :src="nikiLogo" size="small"
+          >汤圆</el-avatar
+        >
         <span class="title_name">汤圆</span>
       </el-header>
 
@@ -61,11 +67,10 @@
       </el-main>
     </el-container>
   </el-container>
-
 </template>
 <style>
 .el-header {
-  background-color: #B3C0D1;
+  background-color: #b3c0d1;
   color: #333;
   line-height: 60px;
 }
@@ -89,19 +94,24 @@
 </style>
 
 <script>
-import nikiLogo from '../src/assets/niki_logo.png'
+import nikiLogo from "../src/assets/niki_logo.png";
 
 export default {
   data() {
     return {
-      nikiLogo: nikiLogo
-    }
+      nikiLogo: nikiLogo,
+    };
   },
 
   methods: {
     goto(path) {
-      this.$router.replace(path)
-    }
-  }
+      if (this.$router.currentRoute.path !== path) {
+        this.$router.replace(path);
+      }
+    },
+    // handleOpen(key, keyPath) {
+    // console.log(key, keyPath);
+    // },
+  },
 };
 </script>

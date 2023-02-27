@@ -6,7 +6,6 @@
       :header-cell-style="{
     'background-color': '#E5EEFF'
     }"
-      chan
       border
       style="width: 100%">
       <el-table-column
@@ -50,7 +49,6 @@
     </el-table>
 
     <el-button class="button-add" @click="addLinkVisible = true">新增链接</el-button>
-
 
     <el-dialog title="新增链接" :visible.sync="addLinkVisible">
       <el-form :model="addForm">
@@ -138,7 +136,7 @@ export default {
     }
   },
   methods: {
-    ///获取全部链接
+    // 获取全部链接
     getAllLinks() {
       axios.get('http://localhost:8000/api/queryAllLinks').then(value => {
         console.log(value)
@@ -148,7 +146,7 @@ export default {
         }
       })
     },
-    ///删除对应链接
+    // 删除对应链接
     showDeleteConfirmDialog(id) {
       this.$confirm('此操作将永久删除该链接, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -163,7 +161,7 @@ export default {
         });
       });
     },
-    ///根据id去删除link
+    // 根据id去删除link
     deleteLinkById(id) {
       axios({
         method: "post",
@@ -213,7 +211,7 @@ export default {
       };
       console.log(targetOne)
     },
-    ///根据id去更新
+    // 根据id去更新
     updateLInkById() {
       this.modifyLinkVisible = false;
       axios({
