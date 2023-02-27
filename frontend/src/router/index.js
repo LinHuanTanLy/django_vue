@@ -6,16 +6,11 @@ import LinkCollection from '@/components/LinkCollection'
 import sales from '../components/sales/sales.vue';
 import linkiee from '../components/linkiee/linkiee.vue';
 import link from '../components/link/link.vue';
-
+import linkContainer from '../components/link/link_container.vue';
 Vue.use(Router)
 
 export default new Router({
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'Index',
-    //   component: Index
-    // },
     {
       path: '/LinkCollection',
       name: 'LinkCollection',
@@ -35,6 +30,11 @@ export default new Router({
       path: '/link',
       name: 'link',
       component: link
+    },
+    {
+      path: '/linkContainer',
+      name: "linkContaienr",
+      component: linkContainer
     }
   ]
 })
