@@ -75,7 +75,12 @@ export default {
       nikiLogo: nikiLogo,
     };
   },
-
+  onLaunch: function (option) {
+    console.log("sdfsfsdfsdfsdfsdf" + option.path);
+  },
+  onLoad: function (option) {
+    console.log("sdfsfsdfsdfsdfsdf" + option.path);
+  },
   methods: {
     goto(path) {
       if (this.$router.currentRoute.path !== path) {
