@@ -1,26 +1,13 @@
 <template>
-  <div id="app">
-    <router-view/>
+  <div id="app" className="fillcontain">
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import {onMounted} from "vue";
-
-export default {
-  name: 'App',
-  mounted() {
-  }
-}
-
+export default {}
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<style lang="less">
+@import './style/common';
 </style>

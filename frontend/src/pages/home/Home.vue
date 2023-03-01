@@ -5,7 +5,11 @@
         <el-menu :default-active="defaultActive" style="min-height: 100%;" theme="dark" router>
           <el-submenu index="1">
             <template slot="title"><i class="el-icon-c-scale-to-original"></i>营销管理</template>
-            <el-menu-item index="userList">营销管理一</el-menu-item>
+            <el-menu-item index="links"
+            >我的收藏夹
+            </el-menu-item
+            >
+            <el-menu-item index="links" @click="replaceRouter('/links')">营销管理一</el-menu-item>
             <el-menu-item index="shopList">营销管理二</el-menu-item>
           </el-submenu>
           <el-submenu index="2">
@@ -20,9 +24,11 @@
           </el-submenu>
         </el-menu>
       </el-col>
-      <el-col :span="20" style="height: 100%;overflow: auto;">
+      <el-col :span="20" style="height: 100%;overflow: auto; width: 800px; background-color: red">
         <keep-alive>
-          <router-view></router-view>
+          <el-main>
+            <router-view></router-view>
+          </el-main>
         </keep-alive>
       </el-col>
     </el-row>
@@ -34,6 +40,11 @@ export default {
   computed: {
     defaultActive: function () {
       return this.$route.path.replace('/', '');
+    }
+  },
+  methods: {
+    replaceRouter: function (router) {
+      this.$router.replace(router);
     }
   },
 }

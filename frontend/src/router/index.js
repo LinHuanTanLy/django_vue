@@ -4,12 +4,17 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const home = () => import("../pages/home/Home.vue")
+const links = () => import("../pages/links/Links.vue")
 
 
 const routers = [
   {
     path: "/",
     component: home
+  },
+  {
+    path: "/links",
+    component: links
   }
 ]
 
