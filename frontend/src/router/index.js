@@ -10,12 +10,15 @@ const links = () => import("../pages/links/Links.vue")
 const routers = [
   {
     path: "/",
-    component: home
+    component: home,
+    children: [
+      {
+        path: "/links",
+        component: links
+      }
+    ]
   },
-  {
-    path: "/links",
-    component: links
-  }
+
 ]
 
 export default new Router({

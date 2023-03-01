@@ -30,3 +30,7 @@ npm install less-loader
 解决方案为：
  * npm uninstall less-loader
  * npm install less-loader@5.0.0
+2. 增加了枚举
+ ```
+  npm install vue-enum
+ ```
