@@ -1,17 +1,22 @@
 <template>
   <el-col>
-    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
-      <el-menu-item v-for="(value) in envList" :key="value" :index="value['index']">
+    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+      <el-menu-item v-for="(value) in envList" :key="value['index']" :index="value['index']">
         <span>{{ value['name'] }}</span>
       </el-menu-item>
     </el-menu>
+    <LinkTables v-for="(value) in envList" :env="value['index']" v-if="activeIndex===value['index']"
+                :key="value['index']">
 
+    </LinkTables>
   </el-col>
 </template>
 
 
 <script>
 import EnvEnum from '../../conf/config.env'
+
+import LinkTables from "./link_table/LinkTables.vue";
 
 export default {
   name: "Links",
@@ -25,6 +30,14 @@ export default {
       ]
     }
   },
+  components: {
+    LinkTables,
+  },
+  methods: {
+    handleSelect(key, keyPath) {
+      this.activeIndex = keyPath[0];
+    }
+  }
 }
 </script>
 

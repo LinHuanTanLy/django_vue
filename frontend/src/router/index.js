@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import * as path from "path";
 
 Vue.use(Router)
 
 const home = () => import("../pages/home/Home.vue")
 const links = () => import("../pages/links/Links.vue")
+const linkTables = () => import("../pages/links/link_table/LinkTables.vue")
 
 
 const routers = [
@@ -14,7 +16,14 @@ const routers = [
     children: [
       {
         path: "/links",
-        component: links
+        component: links,
+        children: [
+          {
+            path: "/link_tables",
+            component: linkTables
+          }
+
+        ]
       }
     ]
   },
