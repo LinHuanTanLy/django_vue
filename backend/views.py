@@ -1,9 +1,8 @@
 import json
 from django.core import serializers
 from django.http import JsonResponse
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage, InvalidPage
+from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
-import time
 import backend.models
 from backend.models import Link
 
@@ -16,6 +15,8 @@ def query_all_link(request):
             env = request.GET.get('env')
             page = request.GET.get('page')
             page_size = request.GET.get('pageSize')
+            if page is None:
+                page = 1
             if page_size is None:
                 page_size = 10
             links = Link.objects.filter(env=env).order_by('id')

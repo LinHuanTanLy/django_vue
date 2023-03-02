@@ -1,11 +1,30 @@
 <template>
-  <el-button>{{ env }}</el-button>
+  <el-button @click="getAllLinks">{{ env }}</el-button>
 </template>
 
 <script>
+import {linkAll} from "../../../utils/net/api";
+
 export default {
   name: "LinkTables",
-  props: ['env']
+  props: ['env'],
+  links: [],
+
+
+  mounted() {
+    this.getAllLinks()
+  },
+
+  methods: {
+    // 获取全部链接
+    getAllLinks() {
+      linkAll({
+        "page": 1,
+      }).then(value => {
+        alert(value)
+      })
+    },
+  }
 }
 </script>
 
