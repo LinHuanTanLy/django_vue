@@ -18,9 +18,9 @@
             <el-menu-item index="addGoods">添加商品</el-menu-item>
           </el-submenu>
           <el-submenu index="3">
-            <template slot="title"><i class="el-icon-plus"></i>链接管理</template>
-            <el-menu-item index="links">链接管理</el-menu-item>
-            <el-menu-item index="addGoods">添加商品</el-menu-item>
+            <template slot="title"><i class="el-icon-share"></i>链接管理</template>
+            <el-menu-item index="links">链接列表</el-menu-item>
+            <el-menu-item index="addGoods">添加链接</el-menu-item>
           </el-submenu>
         </el-menu>
       </el-col>

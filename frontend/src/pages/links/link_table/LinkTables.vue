@@ -9,23 +9,40 @@
         highlight-current-row:true
         style="width: 100%">
         <el-table-column
+          align="center"
           prop="linkUrl"
           label="链接地址"
           width="180">
         </el-table-column>
         <el-table-column
+          align="center"
           prop="linkDescription"
           label="链接描述"
           width="180">
         </el-table-column>
         <el-table-column
+          align="center"
           prop="userName"
           label="姓名"
           width="180">
         </el-table-column>
         <el-table-column
           prop="passWord"
+          align="center"
+          width="180"
           label="地址">
+        </el-table-column>
+        <el-table-column align="center"
+                         width="300" label="操作">
+          <template slot-scope="scope">
+            <el-row>
+              <el-button @click="showUpdateDialog(scope.row)" type="primary" round style="width: 100px">编辑</el-button>
+              <el-button @click="showDeleteConfirmDialog(scope.row.linkId)" type="danger" round style="width: 100px">
+                删除
+              </el-button>
+            </el-row>
+          </template>
+
         </el-table-column>
       </el-table>
     </div>
@@ -78,13 +95,23 @@ export default {
         this.count = value['resultData']["total"]
       })
     },
+    ///页码改变回调
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
+    ///当前页码改变
     handleCurrentChange(val) {
       this.currentPage = val;
       this.getAllLinks()
     },
+    ///显示更改弹窗
+    showUpdateDialog(targetOne) {
+
+    },
+    ///显示删除确认弹窗
+    showDeleteConfirmDialog(targetOne) {
+
+    }
   }
 }
 </script>
@@ -100,7 +127,5 @@ export default {
   float: right;
 }
 
-el-table-column {
-  alignment: center;
-}
+
 </style>
