@@ -65,26 +65,24 @@ def add_link(request):
 
 
 @csrf_exempt
+@request_verify('post', ['linkId'])
 def delete_link(request):
-    response = {}
     err_message = ""
-    link_id = request.POST.get("linkId")
-    if link_id == "":
-        err_message = "请输入对应的id"
+    body = json.loads(request.body)
+    link_id = body.get("linkId")
+    env = body.get("env")
     try:
-        target_one = Link.objects.get(linkId=link_id)
-        if target_one.linkUrl == "":
-            err_message = '查找不到对应的数据'
+        exists = backend.models.Link.objects.filter(id=link_id, env=env).exists()
+        if not exists:
+            err_message = "该链接不存在"
+        else:
+            backend.models.Link.objects.filter(id=link_id).delete()
     except Exception as e:
         err_message = format(str(e))
-    if err_message != "":
-        response['resultCode'] = '9999999'
-        response['resultMessage'] = err_message
+    if len(err_message) > 0:
+        return django_jsonResponse_error(err_message)
     else:
-        backend.models.Link.objects.filter(linkId=link_id).delete()
-        response['resultCode'] = '0'
-        response['resultMessage'] = 'delete success'
-    return JsonResponse(response)
+        return django_jsonResponse_success({}, result_message="deleteLinkSuccess")
 
 
 @csrf_exempt

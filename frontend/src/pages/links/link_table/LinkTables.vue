@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import {linkAll, addLink} from "../../../utils/net/api";
+import {linkAll, addLink, deleteLink} from "../../../utils/net/api";
 
 export default {
   name: "LinkTables",
@@ -137,8 +137,27 @@ export default {
 
     },
     ///显示删除确认弹窗
-    showDeleteConfirmDialog(targetOne) {
-
+    showDeleteConfirmDialog(targetOneId) {
+      this.$confirm('此操作将永久删除该链接, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteLink({
+          "linkId": targetOneId,
+          "env": this.env["key"]
+        }).then(value => {
+          if (value["resultCode"] === '0') {
+            this.currentPage = 1;
+            this.getAllLinks()
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     },
     ///添加链接
     addLink() {
