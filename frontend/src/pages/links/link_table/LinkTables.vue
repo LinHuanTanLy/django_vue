@@ -83,11 +83,32 @@
       </div>
     </el-dialog>
 
+    <!--  编辑链接的弹窗-->
+    <el-dialog title="新增链接" :visible.sync="updateLinkVisible">
+      <el-form :model="addForm">
+        <el-form-item label="链接描述" :label-width="formLabelWidth">
+          <el-input v-model="addForm.linkDescription" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="链接地址" :label-width="formLabelWidth">
+          <el-input v-model="addForm.linkUrl" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="对应账号" :label-width="formLabelWidth">
+          <el-input v-model="addForm.userName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="对应密码" :label-width="formLabelWidth">
+          <el-input v-model="addForm.passWord" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="updateLinkVisible = false">取 消</el-button>
+        <el-button type="primary" @click="updateLink">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import {linkAll, addLink, deleteLink} from "../../../utils/net/api";
+import {linkAll, addLink, deleteLink, updateLink} from "../../../utils/net/api";
 
 export default {
   name: "LinkTables",
@@ -99,6 +120,7 @@ export default {
       count: 0,
       formLabelWidth: '120px',
       addLinkVisible: false,
+      updateLinkVisible: false,
       addForm: {
         "linkDescription": "",
         "linkUrl": "",
@@ -134,7 +156,14 @@ export default {
     },
     ///显示更改弹窗
     showUpdateDialog(targetOne) {
-
+      this.addForm = {
+        "linkDescription": targetOne.linkDescription,
+        "linkUrl": targetOne.linkUrl,
+        "userName": targetOne.userName,
+        "passWord": targetOne.passWord,
+        "linkId": targetOne.linkId,
+      };
+      this.updateLinkVisible = true
     },
     ///显示删除确认弹窗
     showDeleteConfirmDialog(targetOneId) {
@@ -169,6 +198,27 @@ export default {
           this.getAllLinks()
         }
       })
+    },
+    ///修改链接
+    updateLink() {
+      this.updateLinkVisible = false;
+      this.addForm['env'] = this.env['key']
+      updateLink(this.addForm).then(value => {
+        if (value["resultCode"] === '0') {
+          this.resetAddForm()
+          this.currentPage = 1;
+          this.getAllLinks()
+        }
+      })
+    },
+    ///重设状态
+    resetAddForm() {
+      this.addForm = {
+        "linkDescription": "",
+        "linkUrl": "",
+        "userName": "",
+        "passWord": "",
+      }
     }
   }
 }

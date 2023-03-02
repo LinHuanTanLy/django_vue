@@ -88,36 +88,35 @@ def delete_link(request):
 @csrf_exempt
 def update_link(request):
     response = {}
-    link_url = request.POST.get('linkUrl')
-    link_description = request.POST.get('linkDescription')
-    link_remark = request.POST.get('linkRemark')
-    user_name = request.POST.get('userName')
-    pass_word = request.POST.get('passWord')
-    link_id = request.POST.get('linkId')
     err_message = ""
-    if link_id == "":
-        err_message = "输入有误，请重新确认"
+    body = json.loads(request.body)
+    link_url = body.get('linkUrl')
+    link_description = body.get('linkDescription')
+    link_remark = body.get('linkRemark')
+    user_name = body.get('userName')
+    pass_word = body.get('passWord')
+    link_id = body.get('linkId')
+    env = body.get('env')
     try:
-        target_one = Link.objects.get(linkId=link_id)
-        if target_one.linkUrl == "":
-            err_message = '找不到对应链接数据，请重新确认'
+        exists = backend.models.Link.objects.filter(id=link_id, env=env).exists()
+        if not exists:
+            err_message = "该链接不存在"
+        else:
+            target_one = Link.objects.get(id=link_id)
+            if link_url != "":
+                target_one.linkUrl = link_url
+            if link_remark != "":
+                target_one.linkRemark = link_remark
+            if link_description != "":
+                target_one.linkDescription = link_description
+            if user_name != "":
+                target_one.userName = user_name
+            if pass_word != "":
+                target_one.passWord = pass_word
+            target_one.save()
     except Exception as e:
         err_message = format(str(e))
-    if err_message != "":
-        response['resultCode'] = '9999999'
-        response['resultMessage'] = err_message
+    if len(err_message) > 0:
+        return django_jsonResponse_error(err_message)
     else:
-        if link_url != "":
-            target_one.linkUrl = link_url
-        if link_remark != "":
-            target_one.linkRemark = link_remark
-        if link_description != "":
-            target_one.linkDescription = link_description
-        if user_name != "":
-            target_one.userName = user_name
-        if pass_word != "":
-            target_one.passWord = pass_word
-        target_one.save()
-        response['resultCode'] = '0'
-        response['resultMessage'] = "updateLink Success"
-    return JsonResponse(response)
+        return django_jsonResponse_success({}, result_message="updateLinkSuccess")
