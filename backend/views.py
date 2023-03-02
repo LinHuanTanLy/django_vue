@@ -5,11 +5,15 @@ from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 import backend.models
 from backend.models import Link
+from backend.utils.request_verify import request_verify
+from backend.utils.result_utils import django_jsonResponse_success, django_jsonResponse_error
 
 
 @csrf_exempt
 def query_all_link(request):
-    response = {}
+    result_list = []
+    total = 0
+    error_message = ""
     try:
         if request.method == "GET":
             env = request.GET.get('env')
@@ -19,61 +23,45 @@ def query_all_link(request):
                 page = 1
             if page_size is None:
                 page_size = 10
-            links = Link.objects.filter(env=env).order_by('id')
+            links = Link.objects.filter(env=env).order_by('-id')
             paginator = Paginator(links, page_size)
             format_list = json.loads(serializers.serialize('json', paginator.page(page)))
-            result_list = []
+            total = paginator.count
             for item in format_list:
                 model = item["fields"]
                 model["linkId"] = item['pk']
                 result_list.append(model)
-            response["resultData"] = {
-                'list': result_list,
-                "total": paginator.count
-            }
-            response['resultCode'] = '200'
-            response['resultMessage'] = 'success'
         else:
-            response['resultCode'] = '9999999'
-            response['resultMessage'] = "请求方式错误"
+            error_message = "请求方式错误"
     except Exception as e:
-        response['resultCode'] = '9999999'
-        response['resultMessage'] = str(e)
-    return JsonResponse(response)
+        error_message = str(e)
+    if len(error_message) > 0:
+        return django_jsonResponse_error(error_message)
+    else:
+        return django_jsonResponse_success({
+            "list": result_list,
+            "total": total
+        }, "请求成功")
 
 
 #
 @csrf_exempt
+@request_verify('post', ['linkUrl', 'linkDescription'])
 def add_link(request):
-    response = {}
-    link_url = request.POST.get('linkUrl')
-    link_description = request.POST.get('linkDescription')
-    link_remark = request.POST.get('linkRemark')
-    user_name = request.POST.get('userName')
-    pass_word = request.POST.get('passWord')
-    err_message = ""
-
-    if link_url == "":
-        err_message = "请输入链接"
-    if link_description == "":
-        err_message = "请输入链接描述"
-    if link_remark == "":
-        err_message = "请输入链接备注"
-
-    if err_message != "":
-        response['resultCode'] = '9999999'
-        response['resultMessage'] = err_message
-    if err_message == "":
-        backend.models.Link(
-            linkDescription=link_description,
-            linkRemark=link_remark,
-            linkUrl=link_url,
-            userName=user_name,
-            passWord=pass_word
-        ).save()
-        response['resultCode'] = '0'
-        response['resultMessage'] = "addLink Success"
-    return JsonResponse(response)
+    body = json.loads(request.body)
+    link_url = body.get('linkUrl')
+    link_description = body.get('linkDescription')
+    user_name = body.get('userName')
+    pass_word = body.get('passWord')
+    env = body.get('env')
+    backend.models.Link(
+        linkDescription=link_description,
+        linkUrl=link_url,
+        userName=user_name,
+        passWord=pass_word,
+        env=env
+    ).save()
+    return django_jsonResponse_success({}, "addLinkSuccess")
 
 
 @csrf_exempt

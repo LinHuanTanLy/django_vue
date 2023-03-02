@@ -2,6 +2,7 @@
 
   <div class="fillcontain">
 
+    <!--    展示链接的表格-->
     <div class="el-table-links">
       <el-table
         :data="links"
@@ -30,7 +31,7 @@
           prop="passWord"
           align="center"
           width="180"
-          label="地址">
+          label="密码">
         </el-table-column>
         <el-table-column align="center"
                          width="300" label="操作">
@@ -47,8 +48,9 @@
       </el-table>
     </div>
 
-    <el-button class="button-add">添加链接</el-button>
-    <div class="Pagination" style="text-align: left;margin-top: 60px;">
+    <!--    添加按钮-->
+    <el-button class="button-add" @click="addLinkVisible=true">添加链接</el-button>
+    <div class="Pagination" style="text-align: left;margin-top: 40px;margin-left: 12px">
       <el-pagination
         background
         @size-change="handleSizeChange"
@@ -59,38 +61,64 @@
         :total="count">
       </el-pagination>
     </div>
+    <!--  新增链接的弹窗-->
+    <el-dialog title="新增链接" :visible.sync="addLinkVisible">
+      <el-form :model="addForm">
+        <el-form-item label="链接描述" :label-width="formLabelWidth">
+          <el-input v-model="addForm.linkDescription" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="链接地址" :label-width="formLabelWidth">
+          <el-input v-model="addForm.linkUrl" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="对应账号" :label-width="formLabelWidth">
+          <el-input v-model="addForm.userName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="对应密码" :label-width="formLabelWidth">
+          <el-input v-model="addForm.passWord" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addLinkVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addLink">确 定</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-import {linkAll} from "../../../utils/net/api";
+import {linkAll, addLink} from "../../../utils/net/api";
 
 export default {
   name: "LinkTables",
-
   props: ['env'],
-
-
   data() {
     return {
       links: [],
       currentPage: 1,
       count: 0,
+      formLabelWidth: '120px',
+      addLinkVisible: false,
+      addForm: {
+        "linkDescription": "",
+        "linkUrl": "",
+        "userName": "",
+        "passWord": "",
+      },
     }
   },
 
-  mounted() {
+  created() {
     this.getAllLinks()
   },
 
   methods: {
     // 获取全部链接
-    getAllLinks() {
+    async getAllLinks() {
       linkAll({
         "page": this.currentPage,
         "env": this.env["key"]
       }).then(value => {
-        // this.links.push(...value['resultData']["list"])
         this.links = value["resultData"]["list"]
         this.count = value['resultData']["total"]
       })
@@ -111,6 +139,17 @@ export default {
     ///显示删除确认弹窗
     showDeleteConfirmDialog(targetOne) {
 
+    },
+    ///添加链接
+    addLink() {
+      this.addLinkVisible = false;
+      this.addForm['env'] = this.env['key']
+      addLink(this.addForm).then(value => {
+        if (value["resultCode"] === '0') {
+          this.currentPage = 1;
+          this.getAllLinks()
+        }
+      })
     }
   }
 }
