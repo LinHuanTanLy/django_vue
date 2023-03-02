@@ -27,7 +27,10 @@ def query_all_link(request):
                 model = item["fields"]
                 model["linkId"] = item['pk']
                 result_list.append(model)
-            response['list'] = result_list
+            response["resultData"] = {
+                'list': result_list,
+                "total": paginator.count
+            }
             response['resultCode'] = '200'
             response['resultMessage'] = 'success'
         else:
