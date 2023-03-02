@@ -1,28 +1,37 @@
 import json
 from django.core import serializers
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage, InvalidPage
 from django.views.decorators.csrf import csrf_exempt
-
+import time
 import backend.models
 from backend.models import Link
 
 
+@csrf_exempt
 def query_all_link(request):
     response = {}
     try:
-        links = Link.objects.filter()
-        link_list = json.loads(serializers.serialize('json', links))
-        result_list = []
-        if link_list is not None:
-            for item in link_list:
+        if request.method == "GET":
+            env = request.GET.get('env')
+            page = request.GET.get('page')
+            page_size = request.GET.get('pageSize')
+            if page_size is None:
+                page_size = 10
+            links = Link.objects.filter(env=env).order_by('id')
+            paginator = Paginator(links, page_size)
+            format_list = json.loads(serializers.serialize('json', paginator.page(page)))
+            result_list = []
+            for item in format_list:
                 model = item["fields"]
                 model["linkId"] = item['pk']
                 result_list.append(model)
-        response['list'] = result_list
-        response['resultCode'] = '200'
-        response['resultMessage'] = 'success'
-
+            response['list'] = result_list
+            response['resultCode'] = '200'
+            response['resultMessage'] = 'success'
+        else:
+            response['resultCode'] = '9999999'
+            response['resultMessage'] = "请求方式错误"
     except Exception as e:
         response['resultCode'] = '9999999'
         response['resultMessage'] = str(e)
